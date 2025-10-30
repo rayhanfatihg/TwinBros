@@ -22,30 +22,30 @@ Cara kerjanya adalah pengguna cukup meniru pose dari sebuah iconic pop culture d
 twinbros/
 │
 ├── data/
-│   ├── reference_poses/        # Pose referensi duo ikonik (bisa .json, .jpg, .png)
-│   ├── iconic_images/          # Gambar ikonik (Naruto-Sasuke, Mario-Luigi, dll)
-│   └── samples/                # Contoh hasil foto user (opsional)
+│ ├── reference_poses/ # Pose referensi duo ikonik (misal JSON, JPG)
+│ ├── iconic_images/ # Gambar ikonik (Naruto-Sasuke, Mario-Luigi, dll)
+│ └── samples/ # Contoh hasil foto pengguna
 │
 ├── models/
-│   ├── pose_estimation/        # Pretrained model (misal OpenPose / MediaPipe / YOLO-Pose)
-│   └── face_detection/         # (opsional) deteksi wajah untuk tambahan efek
+│ ├── pose_estimation/ # Model pretrained (MediaPipe / YOLO-Pose)
+│ └── face_detection/ # (Opsional) model deteksi wajah
 │
 ├── src/
-│   ├── camera.py               # Capture video dari webcam
-│   ├── pose_detection.py       # Deteksi pose dari frame kamera
-│   ├── pose_matching.py        # Bandingkan pose user dengan referensi
-│   ├── transition.py           # Efek transisi (fade, dissolve, zoom)
-│   ├── ui.py                   # Antarmuka / display window
-│   └── main.py                 # Entry point
+│ ├── camera.py # Menangani input kamera
+│ ├── pose_detection.py # Deteksi pose dua orang
+│ ├── pose_matching.py # Mencocokkan pose dengan pose referensi
+│ ├── transition.py # Efek transisi ke gambar ikonik
+│ ├── ui.py # Tampilan visual aplikasi
+│ └── main.py # Entry point aplikasi
 │
 ├── assets/
-│   ├── sounds/                 # Musik/efek suara transisi
-│   └── fonts/                  # Font untuk overlay teks
+│ ├── sounds/ # Efek suara transisi
+│ └── fonts/ # Font untuk overlay teks
 │
 ├── output/
-│   ├── logs/                   # Log hasil pengujian
-│   └── results/                # Output akhir (video/foto transisi)
+│ ├── logs/ # Log hasil pengujian
+│ └── results/ # Output hasil foto/video akhir
 │
-└── requirements.txt
+└── README.md 
 
 
