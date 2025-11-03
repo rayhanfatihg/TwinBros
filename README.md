@@ -21,23 +21,9 @@ Cara kerjanya adalah pengguna cukup meniru pose dari sebuah iconic pop culture d
 
 Aplikasi ini menggunakan computer vision untuk mendeteksi pose dua orang secara real-time. Jika pose mereka cocok dengan pose duo ikonik (seperti Naruto-Sasuke atau Mario-Luigi) dari database, aplikasi akan memicu efek transisi keren dan menghasilkan foto/video ala ikon tersebut.
 
-## 📸 Demo / Hasil Akhir
-
-[Tempatkan Screenshot, GIF, atau Video demo aplikasi Anda di sini]
-
-## ✨ Fitur Utama
-
-* Deteksi pose **dua orang** secara real-time menggunakan kamera.
-* Pencocokan pose yang terdeteksi dengan database pose referensi ikonik.
-* Efek transisi visual dan audio saat pose berhasil dicocokkan.
-* Menyimpan hasil akhir berupa foto atau video.
-* Antarmuka pengguna (UI) yang interaktif.
-
 ## 📂 Struktur Folder
 
-Berikut adalah struktur folder dari proyek ini, diformat agar mudah dibaca:
-
-
+```bash
 twinbros/
 ├── data/
 │   ├── reference_poses/    # Pose referensi duo ikonik (misal JSON, JPG)
