@@ -6,7 +6,7 @@ class PoseMatcher:
     
     def __init__(self, base_dir=None):
       if base_dir is None:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.reference_dir = os.path.join(base_dir, "data", "reference_poses")
         self.references = self._load_reference_poses()
 
