@@ -4,9 +4,9 @@ import os
 
 class UI:
     def __init__(self):
-        self.font = cv2.FONT_HERSHEY_SIMPLEX
+        self.font = cv2.FONT_HERSHEY_DUPLEX
 
-    def overlay_text(self, frame, text, pos=(20, 40), color=(0, 255, 0), scale=0.8):
+    def overlay_text(self, frame, text, pos=(20, 40), color=(255, 255, 255), scale=0.8):
         cv2.putText(frame, text, pos, self.font, scale, color, 2, cv2.LINE_AA)
         return frame
 
@@ -32,7 +32,7 @@ class UI:
 
         # Overlay text
         text = f"{match_name} ({score:.2f})"
-        cv2.putText(img, text, (20, 50), self.font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+        cv2.putText(img, text, (20, 50), self.font, 1, (255, 255, 255), 2, cv2.LINE_AA)
         
         cv2.imshow("TwinBros", img)
         cv2.waitKey(duration)
