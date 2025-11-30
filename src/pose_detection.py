@@ -3,7 +3,7 @@ import numpy as np
 from ultralytics import YOLO
 
 class PoseDetector:
-    def __init__(self, model_path="yolov8n-pose.pt", conf=0.5):
+    def __init__(self, model_path="yolo11n-pose.pt", conf=0.5):
         self.model = YOLO(model_path)
         self.conf = conf
 
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         cv2.putText(annotated, f"Detected poses: {len(poses)}",
                     (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
-        cv2.imshow("Pose Detection - YOLOv8", annotated)
+        cv2.imshow("Pose Detection - YOLO11", annotated)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

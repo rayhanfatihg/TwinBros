@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 class Camera:
-    def __init__(self, width=720, height=640, model_path="yolov8n-pose.pt"):
+    def __init__(self, width=720, height=640, model_path="yolo11n-pose.pt"):
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # use CAP_DSHOW for Windows
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)

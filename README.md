@@ -1,9 +1,7 @@
 Made by :
 
 - Rayhan Fatih Gunawan
-  
 - Muhammad Nelwan Fakhri
-  
 - Raditya Erza Farandi
 
 ## 📝 Deskripsi Singkat
@@ -16,6 +14,7 @@ Cara kerjanya adalah pengguna cukup meniru pose dari sebuah iconic pop culture d
 # Proyek Deteksi Pose Ikonik (TwinBros)
 
 Aplikasi ini menggunakan computer vision untuk mendeteksi pose dua orang secara real-time. Jika pose mereka cocok dengan pose duo ikonik (seperti Naruto-Sasuke atau Mario-Luigi) dari database, aplikasi akan memicu efek transisi keren dan menghasilkan foto/video ala ikon tersebut.
+
 ## Struktur Proyek
 
 Berikut adalah struktur folder dan file utama dalam proyek ini:
@@ -32,14 +31,14 @@ TwinBros/
 │   ├── audio.py           # Modul manajemen musik (pygame)
 │   ├── camera.py          # Modul akses kamera
 │   ├── main.py            # Entry point utama aplikasi
-│   ├── pose_detection.py  # Deteksi pose menggunakan YOLOv8
+│   ├── pose_detection.py  # Deteksi pose menggunakan YOLO11
 │   ├── pose_matching.py   # Logika pencocokan pose (Cosine Similarity)
 │   ├── transition.py      # Efek transisi visual
 │   ├── ui.py              # Tampilan antarmuka (Overlay teks/gambar)
 │   └── video_recorder.py  # Modul perekaman video
 ├── audio_chop.py          # Script utilitas untuk memotong file audio
 ├── requirements.txt       # Daftar pustaka yang dibutuhkan
-└── yolov8n-pose.pt        # Model YOLOv8 untuk deteksi pose
+└── yolo11n-pose.pt        # Model YOLO11 untuk deteksi pose
 ```
 
 ## Instalasi
@@ -61,7 +60,7 @@ Pastikan Anda telah menginstal Python (versi 3.8 atau lebih baru).
     pip install -r requirements.txt
     ```
     _Isi requirements.txt:_
-    - `ultralytics` (YOLOv8)
+    - `ultralytics` (YOLO11)
     - `opencv-python`
     - `numpy`
     - `pygame`
@@ -115,5 +114,5 @@ File hasil potongan akan disimpan di folder yang sama dengan akhiran `_chopped.w
 
 **Catatan:**
 
-- Pastikan file model `yolov8n-pose.pt` ada di direktori root.
+- Pastikan file model `yolo11n-pose.pt` ada di direktori root.
 - Pastikan folder `data/reference_poses` dan `data/iconic_images` terisi dengan data yang sesuai.
