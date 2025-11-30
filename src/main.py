@@ -102,7 +102,7 @@ def main():
                 
                 if time.time() >= next_capture_time:
                     # Capture!
-                    trans.flash_effect()
+                    trans.flash_effect(video_recorder)
                     print("[INFO] Capturing pose...")
                     
                     if keypoints and len(keypoints) > 0:
@@ -129,13 +129,13 @@ def main():
                         # To record the result overlay, we would need to modify show_match_result to return the image or handle recording internally.
                         # For now, let's accept that the result display is a "pause" in the session flow.
                         
-                        ui.show_match_result(image_path, base_name, best_score, duration=2000)
+                        ui.show_match_result(image_path, base_name, best_score, duration=2000, video_recorder=video_recorder)
                         
                         next_capture_time = time.time() + POSE_INTERVAL
                         
                     else:
                         print("[INFO] Tidak ada pose terdeteksi.")
-                        ui.transition_message("No Pose Detected", 1000)
+                        ui.transition_message("No Pose Detected", 1000, video_recorder)
                         next_capture_time = time.time() + POSE_INTERVAL
 
             print("[INFO] Session ended.")
@@ -144,7 +144,7 @@ def main():
             audio_manager.stop()
             video_recorder.stop()
             
-            ui.transition_message("Session Ended", 2000)
+            ui.transition_message("Session Ended", 2000, video_recorder)
             
             # Drive Upload Message
             drive_link = "https://drive.google.com/drive/folders/1Knv2PaaFLN57YNlExWAAgRxrw-eAakg5?usp=sharing"

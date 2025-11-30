@@ -12,11 +12,12 @@ class VideoRecorder:
 
     def start(self, width, height, fps=20.0):
         timestamp = time.strftime("%Y%m%d-%H%M%S")
-        filename = f"session_{timestamp}.avi"
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        filename = f"session_{timestamp}.mp4"
         path = os.path.join(self.output_dir, filename)
         
         # Define the codec and create VideoWriter object
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         self.writer = cv2.VideoWriter(path, fourcc, fps, (width, height))
         self.is_recording = True
         print(f"[INFO] Recording started: {path}")

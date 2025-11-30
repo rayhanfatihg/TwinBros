@@ -25,12 +25,16 @@ class Transition:
 
             seconds -= 1
 
-    def flash_effect(self):
+    def flash_effect(self, video_recorder=None):
         """
         Simulasi efek flash kamera dengan overlay putih singkat pada window video.
         """
         flash_img = 255 * np.ones((480, 640, 3), dtype=np.uint8)  # Ukuran image harus sesuai video stream!
         cv2.imshow("TwinBros", flash_img)
+        
+        if video_recorder:
+            video_recorder.write(flash_img)
+            
         cv2.waitKey(200)
         # Setelah efek, jangan destroy window agar stream tetap jalan!
         # cv2.destroyWindow("TwinBros")  # Jangan pakai ini!

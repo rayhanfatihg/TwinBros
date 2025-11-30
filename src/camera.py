@@ -19,6 +19,9 @@ class Camera:
         if not ret:
             return None, None
 
+        # Flip frame horizontally for mirror effect
+        frame = cv2.flip(frame, 1)
+
         results = self.model.predict(source=frame, verbose=False)
 
         keypoints = None
