@@ -27,6 +27,17 @@ class PoseDetector:
                     poses.append(norm_pose)
         return poses
 
+    def get_keypoints(self, frame):
+        # Mirroring the logic from Camera class
+        results = self.model.predict(source=frame, verbose=False)
+        keypoints = None
+        if len(results) > 0 and results[0].keypoints is not None:
+            kps = results[0].keypoints
+            xy = kps.xy.cpu().numpy()
+            conf = kps.conf.cpu().numpy()
+            keypoints = [list(zip(x[:, 0], x[:, 1], c)) for x, c in zip(xy, conf)]
+        return keypoints
+
     def draw_poses(self, frame, results):
         annotated = frame.copy()
         for result in results:

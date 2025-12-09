@@ -1,8 +1,7 @@
 import cv2
-from ultralytics import YOLO
 
 class Camera:
-    def __init__(self, width=720, height=640, model_path="yolo11n-pose.pt"):
+    def __init__(self, width=720, height=640):
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # use CAP_DSHOW for Windows
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -10,30 +9,18 @@ class Camera:
         if not self.cap.isOpened():
             raise RuntimeError("Camera not detected or already in use")
 
-        self.model = YOLO(model_path)
         self.width = width
         self.height = height
 
     def get_frame(self):
         ret, frame = self.cap.read()
         if not ret:
-            return None, None
+            return None
 
         # Flip frame horizontally for mirror effect
         frame = cv2.flip(frame, 1)
 
-        results = self.model.predict(source=frame, verbose=False)
-
-        keypoints = None
-        if len(results) > 0 and results[0].keypoints is not None:
-            kps = results[0].keypoints
-            xy = kps.xy.cpu().numpy()
-            conf = kps.conf.cpu().numpy()
-            keypoints = [list(zip(x[:, 0], x[:, 1], c)) for x, c in zip(xy, conf)]
-            # annotated = results[0].plot()
-            return frame, keypoints
-
-        return frame, None
+        return frame
 
     def release(self):
         self.cap.release()

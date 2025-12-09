@@ -17,7 +17,6 @@ st.set_page_config(page_title="TwinBros Pose Matching", layout="wide")
 def get_camera():
     return Camera()
 
-@st.cache_resource
 def get_detector():
     return PoseDetector()
 
@@ -58,6 +57,12 @@ def main():
         st.rerun()
 
     # Placeholders for UI
+    col1, col2 = st.columns(2)
+    with col1:
+        time_metric = st.empty()
+    with col2:
+        next_pose_metric = st.empty()
+        
     video_placeholder = st.empty()
     status_placeholder = st.empty()
 
@@ -83,9 +88,10 @@ def main():
 
     # Helper objects
     if run_camera:
-        # Load resources (cached)
+        # Load resources (cached where appropriate)
         try:
             cam = get_camera()
+            # Detector is NOT cached to avoid 'AttributeError: bn'
             detector = get_detector()
             matcher = get_matcher()
             # Audio Manager depends on sound_dir.
@@ -100,16 +106,12 @@ def main():
                 idx = audio_manager.tracks.index(os.path.join(sound_dir, selected_music))
                 if audio_manager.current_index != idx:
                     audio_manager.current_index = idx
-                    # If we change track, maybe we should stop previous?
-                    # audio_manager.stop() 
              except ValueError:
                 pass
         
         iconic_img_dir = os.path.join(base_dir, "data", "iconic_images")
 
         # Start Button
-        # Only show start button if session is NOT active? Or show as "Cancel"?
-        # Let's keep it simple.
         if not st.session_state.session_active:
             if st.button("Start Session"):
                 st.session_state.session_active = True
@@ -121,24 +123,9 @@ def main():
                     audio_manager.play()
                 
                 # Start Recorder
-                # Need frame size. Get one frame.
-                frame, _ = cam.get_frame()
+                frame = cam.get_frame()
                 if frame is not None:
-                    # We need to make sure we don't overwrite user's video_recorder usage?
-                    # Actually video_recorder instance is local to main(), created fresh on run.
-                    # This is fine. BUT if we are in a loop below, and `session_active` is True (from persistent state),
-                    # we need to ensure the recorder IS started.
-                    # Problem: If script RERUNS mid-session, `video_recorder` is NEW. It is NOT recording.
-                    # So we lose the video handle on rerun!
-                    # FIX: Cache video_recorder? OR just accept that modifying settings breaks the recording.
-                    # Given the user flow, it's better to accept break.
                     st.session_state.final_video_path = video_recorder.start(frame.shape[1], frame.shape[0])
-                    # Store reporter status in session? No, recorder object itself must persist to keep file handle.
-                    # This is complex. 
-                    # Let's simplify: If session is active in state BUT recorder is not recording (because rerun),
-                    # we should probably just kill the session or try to append? Appending is hard.
-                    # Let's just FORCE RESET session if recorder is lost.
-                    pass
                 else:
                     st.error("Camera frame error.")
                     st.session_state.session_active = False
@@ -164,10 +151,13 @@ def main():
         
         try:
             while run_camera:
-                frame, keypoints = cam.get_frame()
+                frame = cam.get_frame()
                 if frame is None:
                     st.error("Failed to capture frame.")
                     break
+                
+                # Detect poses separately
+                keypoints = detector.get_keypoints(frame)
 
                 current_time = time.time()
                 display_frame = frame.copy()
@@ -208,7 +198,8 @@ def main():
                         # break 
                     
                     # Logic continues...
-                    cv2.putText(display_frame, f"Time: {int(remaining)}s", (20, 50), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 255), 2)
+                    # REMOVED: cv2.putText(display_frame, f"Time: {int(remaining)}s", (20, 50), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 255), 2)
+                    time_metric.metric("Session Time Left", f"{int(remaining)}s")
 
                     if current_time < st.session_state.match_display_until:
                         if st.session_state.last_match_image is not None:
@@ -217,9 +208,19 @@ def main():
                     else:
                         time_to_capture = st.session_state.next_capture_time - current_time
                         if time_to_capture > 0:
-                             cv2.putText(display_frame, f"Next Pose: {int(time_to_capture)+1}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 2)
+                             # REMOVED: cv2.putText(display_frame, f"Next Pose: {int(time_to_capture)+1}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 2)
+                             next_pose_metric.metric("Next Pose In", f"{int(time_to_capture)+1}s")
+                        else:
+                             next_pose_metric.metric("Next Pose In", "NOW!")
                         
                         if current_time >= st.session_state.next_capture_time:
+                            # Flash Effect
+                            flash_frame = 255 * np.ones_like(frame, dtype=np.uint8)
+                            if st.session_state.session_active and video_recorder.is_recording:
+                                video_recorder.write(flash_frame)
+                            video_placeholder.image(flash_frame, channels="BGR")
+                            time.sleep(0.2)
+                            
                             if keypoints and len(keypoints) > 0:
                                 person = keypoints[0]
                                 coords = np.array(person)[:, :2]
@@ -235,6 +236,8 @@ def main():
                                 
                                 if image_path and os.path.exists(image_path):
                                     img_overlay = cv2.imread(image_path)
+                                    # Fix: Resize to match camera frame size
+                                    img_overlay = cv2.resize(img_overlay, (frame.shape[1], frame.shape[0]))
                                 else:
                                     img_overlay = np.zeros_like(frame)
                                     cv2.putText(img_overlay, "Image Not Found", (50, 240), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,255), 2)
