@@ -5,3 +5,4 @@ pygame
 librosa
 soundfile
 streamlit
+moviepy

@@ -192,7 +192,14 @@ def main():
                         # End Session
                         st.session_state.session_active = False
                         audio_manager.stop()
-                        video_recorder.stop()
+                        
+                        # Get audio path
+                        audio_path = None
+                        if selected_music != "None":
+                            audio_path = os.path.join(sound_dir, selected_music)
+                            
+                        st.info("Processing video with audio...")
+                        video_recorder.stop(audio_path=audio_path)
                         st.success(f"Session Finished!")
                         if st.session_state.final_video_path:
                              status_placeholder.info(f"Video saved to: {st.session_state.final_video_path}")
