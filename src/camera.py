@@ -30,8 +30,8 @@ class Camera:
             xy = kps.xy.cpu().numpy()
             conf = kps.conf.cpu().numpy()
             keypoints = [list(zip(x[:, 0], x[:, 1], c)) for x, c in zip(xy, conf)]
-            annotated = results[0].plot()
-            return annotated, keypoints
+            # annotated = results[0].plot()
+            return frame, keypoints
 
         return frame, None
 

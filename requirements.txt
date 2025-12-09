@@ -4,3 +4,4 @@ numpy
 pygame
 librosa
 soundfile
+streamlit
